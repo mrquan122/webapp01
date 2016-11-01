@@ -9,7 +9,40 @@
 <link href="" rel="stylesheet">
 
 <script type="text/javascript">
- 
+  $(function(){
+
+            function findWeather() {  
+                var cityUrl = 'http://int.dpool.sina.com.cn/iplookup/iplookup.php?format=js';  
+                $.getScript(cityUrl, function(script, textStatus, jqXHR) {  
+                    var citytq = remote_ip_info.city ;// 获取城市  
+                    $('#provinceCity').html(citytq);  
+                    var url = "http://php.weather.sina.com.cn/iframe/index/w_cl.php?code=js&city=" + citytq + "&day=0&dfc=3";  
+                    $.ajax({  
+                        url : url,  
+                        dataType : "script",  
+                        scriptCharset : "gbk",  
+                        success : function(data) {  
+                            var _w = window.SWther.w[citytq][0];  
+                       //     var weatherImg = judgingWeather(_w.s1||_w.s2);  
+                            $('#weather').html(_w.s1);  
+                         //   $('#weatherImg').attr("src","../../../resources/images/manager/"+weatherImg+".png");  
+                            $('#temperature').html(_w.t1 + "℃/" + _w.t2 + "℃  ");  
+                        }  
+                    });  
+                });  
+            } 
+
+           findWeather(); 
+
+           (function(){var w=[];
+                           w['北京']=[{s1:'多云',s2:'晴',f1:'duoyun',f2:'qing',t1:'8',t2:'-2',p1:'≤3',p2:'≤3',d1:'无持续风向',d2:'无持续风向'}];
+
+                           var add={now:'2016-11-01 22:01:25',time:'1478008885',update:'北京时间11月01日17:10更新',error:'0',total:'1'};
+
+                           window.SWther={w:w,add:add};
+                    })();
+
+})
 </script>
 <style type="text/css">
  body {
