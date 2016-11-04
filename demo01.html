@@ -16,14 +16,13 @@
       <div class="wrap location clearfix">
          <ul >
            <li><a href="">天气</a> <i></i></li>
-           <li><a href="">中国</a> <i></i></li>
-           <li><a href="">广东省</a> <i></i></li>
-           <li id="provinceCity"><a href="">广州市</a> <i></i></li>
+           <li><a href="">城市</a> <i></i></li>
+           <li><a href="" id="provinceCity"></a></li>
          </ul>
       </div>
       
        <div id="search" class="clearfix">
-          <input type="search" id="city"></input>
+          <input type="search" id="city" placeholder="请输入城市名（广州）" style="text-align: center;"></input>
           <span></span>
         </div>
           
@@ -31,8 +30,7 @@
 
           <div class="alert clearfix">
             <ul>
-            <li><span><img src=""></span><em>56 良</em></li>
-            <li><span><img src=""></span> <em>火险 黄色</em></li>
+         
             </ul>
           </div> 
           <div class="degree clearfix">
@@ -50,21 +48,21 @@
          <ul class="days clearfix">
           <li>今天</li>
           <li><img src="" id="img0" style="width: 30px; height: 30px ;vertical-align:middle; "> <span style="vertical-align: middle;">{{date0.s1}}</span></li>
-          <li><span>{{date0.t1}}</span> <span>{{date0.t2}}</span></li>
+          <li><span>{{date0.t1}}℃</span>/ <span>{{date0.t2}}℃</span></li>
           <li>{{ date0.d1}}</li>
           <li>{{ date0.p1}}级</li>
          </ul>
           <ul class="days clearfix">
           <li>明天</li>
-          <li><img src=""> <span>{{date1.s1}}</span></li>
-          <li><span>{{date1.t1}}</span> <span>{{date1.t2}}</span></li>
+          <li><img src="" id="img1"> <span>{{date1.s1}}</span></li>
+          <li><span>{{date1.t1}}℃</span> /<span>{{date1.t2}}℃</span></li>
           <li>{{ date1.d1}}</li>
           <li>{{ date1.p1}}级</li>
          </ul>
           <ul class="days clearfix">
           <li>后天</li>
-          <li><img src=""> <span>{{date2.s1}}</span></li>
-          <li><span>{{date2.t1}}</span> <span>{{date2.t2}}</span></li>
+          <li><img src="" id="img2"> <span>{{date2.s1}}</span></li>
+          <li><span>{{date2.t1}}℃</span>/ <span>{{date2.t2}}℃</span></li>
           <li>{{ date2.d1}}</li>
           <li>{{ date2.p1}}级</li>
          </ul>
@@ -102,7 +100,6 @@
                };           
                  
                  
-            //   var weathercount={晴:'w0', 多云:'w1', 阴:'w2', 小雨:'w3'};
 
                var cityUrl = 'http://int.dpool.sina.com.cn/iplookup/iplookup.php?format=js';  
 
@@ -116,7 +113,7 @@
           
              function findWeather(citytq) {  
      
-                   $('#provinceCity').text(citytq);  
+                   $('#provinceCity').text(citytq+"市");  
                  
                     var url = "http://php.weather.sina.com.cn/iframe/index/w_cl.php?code=js&city=" + citytq + "&day=2&dfc=3";  
                     $.ajax({  
@@ -151,14 +148,19 @@
                              console.log(time);
 
                             var s=date0.s1;
-                            var weathercount="晴多云阴小雨";
+
+          
+                     var weathercount="晴多云阴小雨中雨大雨暴雨大暴雨特大暴雨阵雨雷阵雨雷阵雨伴有冰雹雨夹雪阵雪小雪中雪大雪暴雪雾冻雨沙尘暴小雨转中雨中雨转大雨大雨转暴雨暴雨转大暴雨大暴雨转特大暴雨小雪转中雪中雪转大雪大雪转暴雪浮尘扬沙强沙尘暴霾";
+              
                             var i=weathercount.indexOf(s)
 
-                         $('#weatherimg').attr('src', 'wimg/w'+i+'.png');
+                           $('#weatherimg').attr('src', 'wimg/w'+i+'.png');
                            $('#img0').attr('src', 'wimg/w'+i+'.png');
+                             $('#img1').attr('src', 'wimg/w'+i+'.png');
+                               $('#img2').attr('src', 'wimg/w'+i+'.png');
 
                                console.log("s1"+s);
-                               console.log(i);
+                               console.log(weathercount.indexOf("小雨转中雨"));
                             
 
                         }  
@@ -177,10 +179,15 @@
                       console.log(citytq); 
 
               }
-             var citytq=$('#city').val();
-           
-              
+                      
            });   
+
+           $('#search span').on('click',  function(event) {
+             event.preventDefault();
+                var citytq=$('#city').val();
+
+                      findWeather(citytq);
+           });
   
 
               new Vue({
@@ -310,6 +317,13 @@
     color: #fff;
     line-height: 30px;
    }
+    .degree em::before {
+    position: absolute;
+    top: 18px;
+    right: -20px;
+    font-size: 48px;
+    content: '°';
+   }
    .degree em{
     position: relative;
     float: left;
@@ -380,4 +394,13 @@
     display: table-cell;
 
    }
+   .prop .days img{
+     width: 30px;
+     height: 30px ;
+     vertical-align:middle;
+
+   }
+    .prop .days img+span {
+      vertical-align: middle;
+    }
 </style>
